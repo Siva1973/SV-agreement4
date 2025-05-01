@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Subject-Verb Agreement Quiz – Set 4</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #f7e7ce, #d2f7f0);
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      margin-bottom: 10px;
+    }
+
+    .question-number {
+      font-size: 1.3em;
+      margin-top: 10px;
+    }
+
+    .question {
+      font-size: 1.6em;
+      margin: 20px 0;
+    }
+
+    .answer-option {
+      display: block;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      margin: 10px auto;
+      width: 60%;
+      max-width: 400px;
+      background: #fff;
+      border: 2px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .answer-option:hover {
+      background: #eee;
+    }
+
+    .correct-answer {
+      background-color: #d4edda;
+      border-color: #28a745;
+    }
+
+    .wrong-answer {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+    }
+
+    .correct-answer::after {
+      content: "✔️";
+      font-size: 1.5em;
+      position: absolute;
+      right: 20px;
+      top: 8px;
+    }
+
+    .wrong-answer::after {
+      content: "❌";
+      font-size: 1.5em;
+      position: absolute;
+      right: 20px;
+      top: 8px;
+    }
+
+    .next-button {
+      padding: 10px 25px;
+      margin-top: 20px;
+      font-size: 1.2em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .next-button:hover {
+      background-color: #0056b3;
+    }
+
+    .score {
+      font-size: 1.4em;
+      margin-top: 20px;
+    }
+
+    .gif-image {
+      width: 200px;
+      margin-top: 10px;
+    }
+
+    .toggle-container {
+      margin-top: 30px;
+    }
+
+    .toggle-label {
+      font-size: 1.1em;
+    }
+
+    .music-toggle {
+      width: 50px;
+      height: 25px;
+    }
+
+    .explanation {
+      font-style: italic;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Subject-Verb Agreement – Set 4</h1>
+  <div id="question-number" class="question-number"></div>
+  <div id="question" class="question"></div>
+  <div id="answers"></div>
+  <button class="next-button" onclick="nextQuestion()">Next</button>
+  <div id="score" class="score"></div>
+  <div class="explanation" id="explanation"></div>
+  <img id="gif" class="gif-image" src="" alt="feedback gif">
+
+  <div class="toggle-container">
+    <label class="toggle-label" for="music-toggle">🎵 Background Music:</label>
+    <input type="checkbox" id="music-toggle" class="music-toggle" onchange="toggleMusic()">
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-clearday.mp3" type="audio/mp3">
+  </audio>
+  <audio id="correct-sound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mp3">
+  </audio>
+  <audio id="wrong-sound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-10.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const questions = [
+      {
+        question: "The teacher, along with the students, ____ going to the concert.",
+        options: ["is", "are", "was"],
+        correct: "is",
+        explanation: "The main subject is 'teacher', so the verb is singular: 'is'."
+      },
+      {
+        question: "Some of the cookies ____ on the table.",
+        options: ["is", "are", "were"],
+        correct: "are",
+        explanation: "'Some' with plural nouns takes the plural form of the verb: 'are'."
+      },
+      {
+        question: "One of the boys ____ missing.",
+        options: ["is", "are", "were"],
+        correct: "is",
+        explanation: "Subject is 'one' → singular → 'is'."
+      },
+      {
+        question: "The team ____ practicing every day.",
+        options: ["is", "are", "were"],
+        correct: "is",
+        explanation: "In sports teams, 'team' is a collective noun treated as singular."
+      },
+      {
+        question: "There ____ many challenges ahead.",
+        options: ["is", "are", "were"],
+        correct: "are",
+        explanation: "'Challenges' is plural, so the verb is 'are'."
+      },
+      {
+        question: "Each of the students ____ to bring their own lunch.",
+        options: ["has", "have", "were"],
+        correct: "has",
+        explanation: "'Each' is singular, so the verb is 'has'."
+      },
+      {
+        question: "The media ____ full of fake news.",
+        options: ["is", "are", "were"],
+        correct: "are",
+        explanation: "In modern usage, 'media' is treated as plural, so the verb is 'are'."
+      },
+      {
+        question: "Either my parents or my brother ____ going to come.",
+        options: ["is", "are", "were"],
+        correct: "is",
+        explanation: "When subjects are joined by 'either/or', the verb agrees with the nearest subject: 'brother' → 'is'."
+      },
+      {
+        question: "The group of friends ____ going on vacation next week.",
+        options: ["is", "are", "were"],
+        correct: "is",
+        explanation: "'Group' is a singular noun, so the verb is 'is'."
+      },
+      {
+        question: "None of the employees ____ satisfied with the new policies.",
+        options: ["is", "are", "were"],
+        correct: "are",
+        explanation: "'None' with plural nouns → 'are'."
+      }
+    ];
+
+    const correctGif = "https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif"; // Celebrating dog
+    const wrongGif = "https://media.giphy.com/media/3orieUe6ejxSFxYCXe/giphy.gif"; // Cat running fail
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = questions[current];
+      document.getElementById("question-number").textContent = `Question ${current + 1} of ${questions.length}`;
+      document.getElementById("question").textContent = q.question;
+      const answersDiv = document.getElementById("answers");
+      answersDiv.innerHTML = "";
+
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "answer-option";
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        answersDiv.appendChild(btn);
+      });
+
+      document.getElementById("gif").src = "";
+      document.getElementById("explanation").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const q = questions[current];
+      const correct = q.correct;
+      const options = document.getElementsByClassName("answer-option");
+      const gif = document.getElementById("gif");
+
+      for (let btn of options) {
+        btn.disabled = true;
+        if (btn.textContent === correct) {
+          btn.classList.add("correct-answer");
+        } else if (btn.textContent === selected) {
+          btn.classList.add("wrong-answer");
+        }
+      }
+
+      if (selected === correct) {
+        document.getElementById("correct-sound").play();
+        gif.src = correctGif;
+        score++;
+      } else {
+        document.getElementById("wrong-sound").play();
+        gif.src = wrongGif;
+      }
+
+      document.getElementById("score").textContent = `Score: ${score}`;
+      document.getElementById("explanation").textContent = q.explanation;
+    }
+
+    function nextQuestion() {
+      if (current < questions.length - 1) {
+        current++;
+        loadQuestion();
+      } else {
+        document.getElementById("question-number").textContent = "";
+        document.getElementById("question").textContent = "🎉 You've completed the quiz!";
+        document.getElementById("answers").innerHTML = "";
+        document.getElementById("score").textContent = `Final Score: ${score} / 10`;
+        document.getElementById("next-button").style.display = "none";
+      }
+    }
+
+    function toggleMusic() {
+      const bgMusic = document.getElementById("bg-music");
+      if (document.getElementById("music-toggle").checked) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+
+    // Start the quiz
+    loadQuestion();
+  </script>
+
+</body>
+</html>
